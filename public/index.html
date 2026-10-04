@@ -1,1 +1,579 @@
 
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ansöko – hitta jobb som passar dig</title>
+<meta name="description" content="Ansöko hjälper dig hitta jobb som passar din erfarenhet, dina önskemål och din plats.">
+<style>
+:root{--ink:#101828;--muted:#667085;--line:#eaecf0;--soft:#f8f9fc;--brand:#5b5bd6;--brand2:#4747b8;--green:#12b76a;--shadow:0 18px 50px rgba(16,24,40,.08)}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:#f7f8fc}
+button,input,textarea{font:inherit}button{cursor:pointer}
+.wrap{max-width:1080px;margin:auto;padding:0 22px}
+nav{height:72px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:22px;font-weight:800;letter-spacing:-.6px}.logo span{color:var(--brand)}
+.navtag{font-size:13px;color:var(--muted)}
+.hero{text-align:center;padding:54px 0 38px}.eyebrow{display:inline-flex;padding:7px 11px;border:1px solid #dfe1ff;background:#f1f1ff;border-radius:999px;color:var(--brand2);font-size:12px;font-weight:700}
+h1{font-size:clamp(38px,6vw,62px);line-height:1.02;letter-spacing:-2.8px;margin:18px auto 16px;max-width:780px}
+.hero p{color:var(--muted);font-size:17px;line-height:1.6;max-width:670px;margin:auto}
+.card{background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:26px;margin-bottom:22px}
+h2{margin:0 0 6px;font-size:22px;letter-spacing:-.5px}.sub{color:var(--muted);font-size:13px;line-height:1.5;margin:0 0 22px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.full{grid-column:1/-1}
+label{display:block;font-size:12px;font-weight:700;margin:0 0 7px}
+input[type=text],textarea{width:100%;border:1px solid #d0d5dd;border-radius:11px;padding:12px 13px;outline:none;background:#fff}
+input:focus,textarea:focus{border-color:var(--brand);box-shadow:0 0 0 3px #eeeeff}
+textarea{min-height:125px;resize:vertical}
+.upload{border:1.5px dashed #cfd4dc;border-radius:13px;padding:17px;text-align:center;background:#fcfcfd;color:var(--muted);font-size:13px;cursor:pointer}
+.upload strong{display:block;color:var(--ink);margin-bottom:4px}.upload input{display:none}
+.pillrow{display:flex;gap:8px;flex-wrap:wrap}.pill{border:1px solid #d0d5dd;border-radius:999px;padding:8px 11px;background:#fff;font-size:12px}.pill.active{border-color:var(--brand);background:#f0f0ff;color:var(--brand2);font-weight:700}
+.actions{display:flex;justify-content:center;margin-top:22px}.primary{border:0;background:var(--brand);color:#fff;border-radius:11px;padding:13px 20px;font-weight:800;box-shadow:0 8px 18px rgba(91,91,214,.22)}.primary:hover{background:var(--brand2)}
+.status{display:none;margin-top:14px;text-align:center;color:var(--muted);font-size:13px}
+.results{display:none}.resultHead{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;margin-bottom:16px}.count{color:var(--muted);font-size:12px;margin-top:4px}
+.job{border:1px solid var(--line);border-radius:16px;padding:18px;margin-top:12px;background:#fff}.jobtop{display:flex;justify-content:space-between;gap:15px}.jobtitle{font-size:16px;font-weight:800}.company{font-size:12px;color:var(--muted);margin-top:4px}.score{min-width:68px;text-align:center;background:#ecfdf3;color:#027a48;border-radius:999px;padding:7px 9px;font-weight:800;font-size:12px;height:max-content}.meta{display:flex;flex-wrap:wrap;gap:7px;margin:11px 0}.tag{background:#f2f4f7;border-radius:7px;padding:5px 8px;color:#475467;font-size:11px}.desc{font-size:12px;color:#475467;line-height:1.55;margin:9px 0}.why{font-size:12px;line-height:1.5;background:#f8f9fc;border-radius:10px;padding:10px;color:#344054}.jobactions{display:flex;gap:9px;margin-top:13px}.linkbtn{border:1px solid #d0d5dd;background:#fff;color:var(--ink);border-radius:9px;padding:9px 11px;font-size:12px;font-weight:700;text-decoration:none}.empty{padding:24px;text-align:center;border:1px dashed #d0d5dd;border-radius:14px;color:var(--muted);font-size:13px}
+.feature{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin:25px 0 42px}.feature div{background:#fff;border:1px solid var(--line);border-radius:15px;padding:17px}.feature b{display:block;font-size:13px;margin-bottom:5px}.feature span{font-size:12px;color:var(--muted);line-height:1.45}
+footer{padding:18px 0 45px;text-align:center;color:#98a2b3;font-size:12px}
+@media(max-width:700px){.grid,.feature{grid-template-columns:1fr}.full{grid-column:auto}.hero{padding-top:35px}h1{letter-spacing:-1.8px}.resultHead{display:block}.jobtop{align-items:flex-start}}
+.tier{margin-top:22px}.tier h3{margin:0;font-size:16px}.tierSub{font-size:12px;color:#667085;margin:4px 0 10px}
+
+.qualbox{margin-top:12px;padding:12px;border:1px solid #eaecf0;border-radius:11px;background:#fcfcfd;font-size:12px}.qualhead{font-weight:800;margin-bottom:7px}.qualrow{display:flex;gap:7px;margin:5px 0;line-height:1.45}.ok{color:#027a48}.missing{color:#b42318}.unknown{color:#b54708}.reqcount{font-size:11px;color:#667085;margin-top:7px}
+
+/* Ansöko Pro */
+.pro-section{margin-top:26px;padding:22px;border:1px solid #e5e7eb;border-radius:18px;background:linear-gradient(135deg,#fff,#f8f7ff)}
+.pro-top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px}
+.pro-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:999px;background:#111827;color:#fff;font-size:11px;font-weight:800}
+.pro-title{font-size:21px;font-weight:850;margin:8px 0 4px}.pro-sub{color:#667085;font-size:13px;line-height:1.5}
+.pro-price{font-size:24px;font-weight:850;white-space:nowrap}.pro-price span{font-size:12px;color:#667085;font-weight:500}
+.pro-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:15px 0}
+.pro-item{padding:11px 12px;border:1px solid #eaecf0;border-radius:11px;background:#fff;font-size:12px}.pro-item b{display:block;margin-bottom:3px}.pro-item small{color:#667085}
+.pro-cta{border:0;border-radius:10px;padding:11px 16px;font-weight:800;cursor:pointer;background:#111827;color:#fff}
+.pro-note{font-size:11px;color:#98a2b3;margin-top:9px}
+.free-pro-pill{display:inline-flex;margin-left:7px;padding:3px 7px;border-radius:999px;font-size:10px;font-weight:800;background:#eef2ff;color:#4338ca}
+.pro-modal{position:fixed;inset:0;background:rgba(16,24,40,.55);display:none;align-items:center;justify-content:center;padding:20px;z-index:9999}
+.pro-modal.open{display:flex}.pro-card{width:min(520px,100%);background:#fff;border-radius:20px;padding:24px;box-shadow:0 24px 70px rgba(0,0,0,.2)}
+.pro-card h2{margin:0 0 7px}.pro-card p{color:#667085;font-size:13px;line-height:1.5}.pro-list{margin:16px 0;padding:0;list-style:none}.pro-list li{padding:8px 0;border-bottom:1px solid #f2f4f7;font-size:13px}.pro-close{float:right;border:0;background:transparent;font-size:22px;cursor:pointer;color:#667085}.pro-modal .pro-cta{width:100%;margin-top:8px}
+@media(max-width:600px){.pro-top{align-items:flex-start}.pro-grid{grid-template-columns:1fr}.pro-price{font-size:20px}}
+
+.cv-file-status{margin-top:8px;font-size:12px;color:#667085;line-height:1.45}
+.cv-file-status.loading{color:#b54708}.cv-file-status.success{color:#027a48}.cv-file-status.error{color:#b42318}
+
+.application-panel{margin-top:18px;padding:18px;border:1px solid #e5e7eb;border-radius:15px;background:#fff}
+.application-title{font-size:16px;font-weight:850;margin-bottom:4px}.application-sub{font-size:12px;color:#667085;margin-bottom:13px}
+.app-actions{display:flex;gap:8px;flex-wrap:wrap}.app-btn{border:1px solid #d0d5dd;background:#fff;border-radius:9px;padding:9px 13px;font-weight:750;cursor:pointer;font-size:12px}.app-btn.primary{background:#111827;color:#fff;border-color:#111827}
+.application-output{margin-top:13px;display:none}.application-output.open{display:block}
+.application-output textarea{width:100%;min-height:260px;border:1px solid #d0d5dd;border-radius:10px;padding:12px;box-sizing:border-box;font:inherit;font-size:13px;line-height:1.55;resize:vertical}
+.app-meta{font-size:11px;color:#667085;margin:7px 0}.copy-ok{color:#027a48;font-weight:700}
+
+.ai-status{margin-top:8px;font-size:11px;line-height:1.45}.ai-status.loading{color:#b54708}.ai-status.ok{color:#027a48}.ai-status.error{color:#b42318}
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs" type="module" id="pdfjs-lib"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.8.0/mammoth.browser.min.js" id="mammoth-lib"></script>
+</head>
+<body>
+<div class="wrap">
+<nav><div class="logo">Ansö<span>ko</span></div><div class="navtag">Din jobbsökarassistent</div></nav>
+
+<header class="hero">
+<div class="eyebrow">SMARTARE JOBBSÖKNING</div>
+<h1>Hitta jobb som faktiskt passar dig.</h1>
+<p>Berätta vem du är, vad du söker och var du vill jobba. Ansöko hittar aktuella jobb och hjälper dig se vilka som passar bäst.</p>
+</header>
+
+<section class="card">
+<h2>Berätta om dig</h2>
+<p class="sub">Ge Ansöko så mycket relevant information du vill. Ansöko väger ihop CV, önskemål, närliggande yrkesområden och jobbannonsens innehåll – inklusive krav som körkort, truckkort, språk och erfarenhet.</p>
+<div class="grid">
+<div>
+<label for="name">Ditt namn</label>
+<input id="name" type="text" placeholder="Ex. Felix Andersson">
+</div>
+<div>
+<label>CV</label>
+<label class="upload" for="cvfile"><strong id="fileName">📄 Tryck för att ladda upp CV</strong><span>PDF, Word eller textfil</span><input id="cvFile" id="cvfile" type="file" accept=".pdf,.docx,.txt">
+<div id="cvFileStatus" class="cv-file-status">PDF, Word eller textfil. Ansöko läser filen direkt i din webbläsare.</div><div class="pro-note">CV-texten skickas inte till någon AI-tjänst i den här gratisversionen.</div>
+</label>
+</div>
+<div class="full">
+<label for="cv">Eller klistra in ditt CV</label>
+<textarea id="cv" placeholder="Skriv eller klistra in ditt CV här..."></textarea>
+</div>
+<div>
+<label for="wish">🔎 Vad letar du efter?</label>
+<input id="wish" type="text" placeholder="Ex. butik, försäljning eller lager">
+</div>
+<div>
+<label for="location">📍 Var vill du jobba?</label>
+<input id="location" type="text" placeholder="Ex. Uddevalla">
+</div>
+<div class="full">
+<label>📏 Hur långt kan du tänka dig att resa?</label>
+<div class="pillrow" id="radius">
+<button class="pill active" data-radius="10">10 km</button><button class="pill" data-radius="25">25 km</button><button class="pill" data-radius="50">50 km</button><button class="pill" data-radius="100">100 km</button>
+</div>
+</div>
+<div class="full">
+<label>⭐ Vad är viktigt för dig?</label>
+<div class="pillrow" id="preferences">
+<button class="pill" data-value="Deltid">Deltid</button><button class="pill" data-value="Heltid">Heltid</button><button class="pill" data-value="Försäljning">Försäljning</button><button class="pill" data-value="Butik">Butik</button><button class="pill" data-value="Kundservice">Kundservice</button><button class="pill" data-value="Lager">Lager</button><button class="pill" data-value="Kontor">Kontor</button><button class="pill" data-value="Ingen erfarenhet krävs">Ingen erfarenhet krävs</button>
+</div>
+</div>
+</div>
+<div class="actions"><button class="primary" id="searchBtn">🔍 Hitta jobb som passar mig</button></div>
+<div class="status" id="status"></div>
+</section>
+
+<section class="results card" id="results">
+<div class="resultHead"><div><h2>Jobb som passar dig</h2><div class="count" id="resultCount"></div></div></div>
+<div id="jobList"></div>
+</section>
+
+<div class="feature">
+<div><b>🎯 Matchning</b><span>Se vilka aktuella jobb som bäst matchar din profil och dina önskemål.</span></div>
+<div><b>✍️ Ansökan</b><span>Få hjälp att anpassa ditt personliga brev och dina ansökningssvar.</span></div>
+<div><b>🎤 Intervju</b><span>Förbered dig inför intervjun med frågor som passar rollen.</span></div>
+</div>
+
+<footer>Ansöko · Hitta ditt nästa jobb</footer>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+let selectedRadius=10;
+const selectedPrefs=new Set();
+
+document.querySelectorAll('#radius .pill').forEach(b=>b.addEventListener('click',()=>{
+ document.querySelectorAll('#radius .pill').forEach(x=>x.classList.remove('active'));
+ b.classList.add('active'); selectedRadius=Number(b.dataset.radius);
+}));
+document.querySelectorAll('#preferences .pill').forEach(b=>b.addEventListener('click',()=>{
+ b.classList.toggle('active');
+ const v=b.dataset.value;
+ b.classList.contains('active')?selectedPrefs.add(v):selectedPrefs.delete(v);
+}));
+
+$('cvfile').addEventListener('change',e=>{
+ const f=e.target.files[0]; if(f) $('fileName').textContent='📄 '+f.name;
+});
+
+function tokens(s){
+ return (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+ .replace(/[^a-z0-9åäö\s-]/g,' ').split(/\s+/).filter(x=>x.length>=4);
+}
+const stop=new Set(['detta','samt','eller','där','som','från','med','för','till','har','och','att','den','ett','inte','vara','vill','gärna','jobb','jobba','jobbet','jag','mig','kan','inom','som','this','with','that','from']);
+function unique(a){return [...new Set(a)]}
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]) )}
+function attr(s){return esc(s).replace(/`/g,'&#096;')}
+
+
+const skillGroups={
+ butik:["butik","butikssaljare","butiksmedarbetare","kassa","kassor","varuplock","merchandiser","varuhus","retail"],
+ försäljning:["forsaljning","saljare","salj","butikssaljare","kundmote","b2c","telefonforsaljning","utesaljare","innesaljare"],
+ kundservice:["kundservice","kundtjanst","kundkontakt","kundmote","support","service","reception"],
+ lager:["lager","lagermedarbetare","lagerarbete","logistik","varuplock","orderplock","terminal","godsmottagning","truck"],
+ kontor:["kontor","administration","administrativ","reception","order","bokning"],
+ praktiskt:["praktiskt","montering","produktion","varuplock","leverans","godsmottagning"]
+};
+const related={butik:["försäljning","kundservice","praktiskt"],försäljning:["butik","kundservice"],kundservice:["butik","försäljning","kontor"],lager:["praktiskt","butik"],kontor:["kundservice","försäljning"]};
+
+function normalize(s){
+ return (s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+ .replace(/[^a-z0-9åäö\s-]/g," ").replace(/\s+/g," ").trim();
+}
+function words(s){return unique(normalize(s).split(/\s+/).filter(x=>x.length>=4));}
+function unique(a){return [...new Set(a)]}
+function groupMatches(text, group){
+ const terms=skillGroups[group]||[];
+ return terms.filter(t=>text.includes(normalize(t)));
+}
+function inferGroups(cv,wish,prefs){
+ const text=normalize(cv+" "+wish+" "+[...prefs].join(" "));
+ const groups=[];
+ for(const g of Object.keys(skillGroups)){
+   if(groupMatches(text,g).length) groups.push(g);
+ }
+ return unique(groups);
+}
+
+
+const qualificationRules=[
+ {label:"B-körkort",patterns:["b-körkort","b körkort","körkort b","personbilskörkort","körkort"],profile:["b-körkort","b körkort","körkort b","b-korkort"],type:"license"},
+ {label:"C/CE-körkort",patterns:["c-körkort","ce-körkort","c körkort","ce körkort"],profile:["c-körkort","ce-körkort","c körkort","ce körkort"],type:"license"},
+ {label:"Truckkort",patterns:["truckkort","truckförarbevis","truckkort a","truckkort b","truckbehörighet"],profile:["truckkort","truckförarbevis","truckbehörighet"],type:"certificate"},
+ {label:"Erfarenhet av butik",patterns:["butikserfarenhet","erfarenhet av butik","butiksarbete","butiksvana","butik"],profile:["butik","butikserfarenhet","butiksarbete","butiksmedarbetare","butikssäljare"],type:"experience"},
+ {label:"Erfarenhet av försäljning",patterns:["säljerfarenhet","erfarenhet av försäljning","försäljningserfarenhet","försäljning"],profile:["försäljning","försäljningserfarenhet","säljare","butikssäljare"],type:"experience"},
+ {label:"Erfarenhet av kundservice",patterns:["kundservice","kundtjänst","kundkontakt","serviceerfarenhet"],profile:["kundservice","kundtjänst","kundkontakt","service","kundbemötande"],type:"experience"},
+ {label:"Lagererfarenhet",patterns:["lagererfarenhet","erfarenhet av lager","lagerarbete","lager"],profile:["lager","lagerarbete","lagermedarbetare","orderplock","godsmottagning"],type:"experience"},
+ {label:"Svenska",patterns:["svenska i tal","svenska i tal och skrift","goda kunskaper i svenska","svenska"],profile:["svenska","svensktalande"],type:"language"},
+ {label:"Engelska",patterns:["engelska i tal","engelska i tal och skrift","goda kunskaper i engelska","engelska"],profile:["engelska"],type:"language"},
+ {label:"Gymnasieutbildning",patterns:["gymnasieutbildning","gymnasieexamen","gymnasiekompetens","gymnasium"],profile:["gymnasium","gymnasie","gymnasieexamen","gymnasieutbildning"],type:"education"},
+ {label:"Deltid",patterns:["deltid","extraarbete","extrajobb","timanställning"],profile:["deltid","extrajobb","timanställning"],type:"work"},
+ {label:"Heltid",patterns:["heltid"],profile:["heltid"],type:"work"},
+ {label:"Helgarbete",patterns:["helg","helger","helgarbete"],profile:["helg","helgarbete"],type:"work"}
+];
+
+function norm(s){return (s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");}
+function containsAny(text,arr){return arr.some(x=>text.includes(norm(x)));}
+function extractQualifications(job,cv){
+ const jobText=norm((job.headline||"")+" "+(job.description?.text||job.description?.text_formatted||""));
+ const cvText=norm(cv);
+ const found=[],missing=[],merits=[];
+ qualificationRules.forEach(rule=>{
+   const mentioned=containsAny(jobText,rule.patterns);
+   if(!mentioned)return;
+   const required=/(krav|required|måste|behöver|förutsätter|obligatorisk|ett krav)/.test(jobText.slice(Math.max(0,jobText.indexOf(norm(rule.patterns.find(p=>jobText.includes(norm(p)))||"")))-100, Math.min(jobText.length,jobText.indexOf(norm(rule.patterns.find(p=>jobText.includes(norm(p)))||""))+180)));
+   const has=containsAny(cvText,rule.profile);
+   if(has) found.push(rule.label);
+   else if(required) missing.push(rule.label);
+   else merits.push(rule.label);
+ });
+ return {found:unique(found),missing:unique(missing),merits:unique(merits)};
+}
+
+function matchJob(job,cv,wish,loc,prefs){
+ const title=norm(job.headline||"");
+ const desc=norm(job.description?.text||job.description?.text_formatted||"");
+ const municipality=norm(job.workplace_address?.municipality||job.workplace_address?.municipality_name||"");
+ const text=title+" "+desc+" "+municipality;
+ const profile=norm(cv+" "+wish+" "+[...prefs].join(" "));
+ const groups=inferGroups(cv,wish,prefs);
+ const quals=extractQualifications(job,cv);
+
+ let score=52;
+ const matchedTerms=[];
+ groups.forEach(g=>{
+   const direct=groupMatches(text,g);
+   const rel=(related[g]||[]).filter(r=>groupMatches(text,r).length);
+   if(direct.length){score+=10;matchedTerms.push(g)}
+   else if(rel.length){score+=5}
+ });
+ if(loc && municipality.includes(norm(loc))) score+=8;
+
+ // Qualification evidence has much more weight than incidental word overlap.
+ score+=Math.min(12,quals.found.length*4);
+ score-=Math.min(28,quals.missing.length*10);
+
+ const titleRelevant=groups.some(g=>(skillGroups[g]||[]).some(t=>title.includes(norm(t))));
+ if(titleRelevant)score+=6;
+
+ score=Math.max(35,Math.min(97,score));
+
+ let tier=score>=82?"Stark match":score>=65?"Bra match":"Kan passa";
+ if(quals.missing.length>=2 && score>=82){score=79;tier="Bra match"}
+
+ const reasons=[];
+ if(quals.found.length)reasons.push("Uppfyller: "+quals.found.slice(0,3).join(", "));
+ if(quals.missing.length)reasons.push("Krav saknas i CV: "+quals.missing.slice(0,3).join(", "));
+ if(quals.merits.length)reasons.push("Meriter som nämns i annonsen: "+quals.merits.slice(0,2).join(", "));
+ if(matchedTerms.length)reasons.push("Relevant område: "+matchedTerms.slice(0,2).join(", "));
+ if(loc && municipality.includes(norm(loc)))reasons.push("Platsen matchar");
+ if(!reasons.length)reasons.push("Övergripande matchning mot din profil");
+
+ return {score,tier,reasons,quals};
+}
+
+async function searchJobs(){
+ const wish=$('wish').value.trim();
+ const loc=$('location').value.trim();
+ const cv=$('cv').value.trim();
+ const prefs=[...selectedPrefs];
+
+ $('status').style.display='block';
+ $('status').textContent='Hämtar fler aktuella jobb och analyserar vad som kan passa...';
+ $('results').style.display='block';
+ $('jobList').innerHTML='<div class="empty">Söker brett efter jobb inom områden som kan passa din profil...</div>';
+ $('results').scrollIntoView({behavior:'smooth',block:'start'});
+
+ try{
+   // Search several related queries rather than only the user's exact wording.
+   const groups=inferGroups(cv,wish,prefs);
+   const queryTerms=new Set([wish,...prefs]);
+   groups.forEach(g=>{
+     (skillGroups[g]||[]).slice(0,3).forEach(t=>queryTerms.add(t));
+     (related[g]||[]).forEach(r=>(skillGroups[r]||[]).slice(0,2).forEach(t=>queryTerms.add(t)));
+   });
+   const terms=[...queryTerms].filter(Boolean);
+   const queries=terms.slice(0,8);
+   if(!queries.length) queries.push("butik","försäljning","kundservice","lager","service");
+
+   const responses=await Promise.all(queries.map(q=>{
+     const query=[q,loc].filter(Boolean).join(" ");
+     return fetch("https://jobsearch.api.jobtechdev.se/search?"+new URLSearchParams({q:query,limit:"20"}))
+       .then(r=>r.ok?r.json():{hits:[]}).catch(()=>({hits:[]}));
+   }));
+
+   const map=new Map();
+   responses.forEach(d=>(d.hits||[]).forEach(j=>{
+     const id=j.id||j.webpage_url||j.headline;
+     if(id&&!map.has(id)) map.set(id,j);
+   }));
+
+   const all=[...map.values()];
+   if(!all.length){
+     $('resultCount').textContent='Inga aktuella jobb hittades';
+     $('jobList').innerHTML='<div class="empty">Inga aktuella jobb hittades. Prova ett bredare sökord eller en större radie.</div>';
+     return;
+   }
+
+   const ranked=all.map(j=>({j,m:matchJob(j,cv,wish,loc,prefs)}))
+     .sort((a,b)=>b.m.score-a.m.score)
+     .slice(0,30);
+
+   const strong=ranked.filter(x=>x.m.tier==="Stark match");
+   const good=ranked.filter(x=>x.m.tier==="Bra match");
+   const possible=ranked.filter(x=>x.m.tier==="Kan passa");
+
+   $('resultCount').textContent=`${ranked.length} aktuella jobb · ${strong.length} starka · ${good.length} bra · ${possible.length} möjliga`;
+
+   const render=(items,title,subtitle)=>{
+     if(!items.length)return "";
+     return `<div class="tier"><h3>${title}</h3><div class="tierSub">${subtitle}</div>`+
+       items.map(({j,m})=>{
+         const jobTitle=j.headline||"Ledig tjänst";
+         const company=j.employer?.name||"Arbetsgivare";
+         const municipality=j.workplace_address?.municipality||j.workplace_address?.municipality_name||"";
+         const desc=(j.description?.text||j.description?.text_formatted||"").replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim().slice(0,280);
+         const link=j.webpage_url||j.application_details?.url||"#";
+         return `<article class="job">
+           <div class="jobtop"><div><div class="jobtitle">${esc(jobTitle)}</div><div class="company">${esc(company)}</div></div><div class="score">${m.score}%</div></div>
+           <div class="meta">${municipality?`<span class="tag">📍 ${esc(municipality)}</span>`:""}<span class="tag">${esc(m.tier)}</span></div>
+           <div class="desc">${esc(desc)}</div>
+           <div class="why"><b>Varför Ansöko tror att det kan passa</b><br>✓ ${m.reasons.map(esc).join("<br>✓ ")}</div>
+           <div class="qualbox">
+             <div class="qualhead">📋 Kvalifikationer</div>
+             ${m.quals.found.length?`<div class="qualrow ok">✓ ${m.quals.found.map(esc).join(", ")}</div>`:""}
+             ${m.quals.missing.length?`<div class="qualrow missing">✕ Inte hittat i CV: ${m.quals.missing.map(esc).join(", ")}</div>`:""}
+             ${m.quals.merits.length?`<div class="qualrow unknown">• Kan vara meriterande: ${m.quals.merits.map(esc).join(", ")}</div>`:""}
+             <div class="reqcount">Ansöko utgår bara från information som faktiskt finns i ditt CV. Saknas något betyder det inte automatiskt att du inte har det.</div>
+           </div>
+           <div class="jobactions"><div class="application-panel">
+             <div class="application-title">✍️ Skapa ansökan</div>
+             <div class="application-sub">Få ett jobbanpassat utkast baserat på ditt CV och den här annonsen.</div>
+             <div class="app-actions">
+               <button class="app-btn primary" onclick='createApplicationFromCard(this)'>Skapa personligt brev</button>
+               <button class="app-btn" onclick='showApplicationQuestions(this)'>Förbered ansökningsfrågor</button>
+             </div>
+             <div class="application-output"><div class="app-meta"></div><textarea></textarea>
+               <div class="app-actions" style="margin-top:8px"><button class="app-btn" onclick='copyApplication(this)'>Kopiera</button></div>
+             </div>
+           </div><a class="linkbtn" href="${attr(link)}" target="_blank" rel="noopener noreferrer">Visa originalannons →</a></div>
+         </article>`;
+       }).join("")+"</div>";
+   };
+
+   $('jobList').innerHTML=
+     render(strong,"🔥 Stark match","Jobb som ligger närmast din profil och dina önskemål.")+
+     render(good,"👍 Bra match","Jobb där dina erfarenheter är överförbara även om rollen inte är exakt samma.")+
+     render(possible,"💡 Kan passa","Lite längre från din profil, men Ansöko tycker att de kan vara värda att kolla.");
+
+ }catch(e){
+   $('resultCount').textContent='Kunde inte hämta jobb';
+   $('jobList').innerHTML='<div class="empty">Jobbkällan svarar inte just nu. Försök igen om en stund.</div>';
+ }finally{
+   $('status').style.display='none';
+ }
+}
+$('searchBtn').addEventListener('click',searchJobs);
+</script>
+
+<section class="pro-section" id="ansoko-pro">
+  <div class="pro-top">
+    <div>
+      <span class="pro-badge">✦ ANSÖKO PRO</span>
+      <div class="pro-title">Gå från matchning till färdig ansökan.</div>
+      <div class="pro-sub">Gratisversionen hjälper dig hitta rätt jobb. Pro hjälper dig faktiskt söka dem.</div>
+    </div>
+    <div class="pro-price">69 kr <span>/ mån</span></div>
+  </div>
+  <div class="pro-grid">
+    <div class="pro-item"><b>✍️ AI-personligt brev</b><small>Skapa ett brev anpassat till jobbet.</small></div>
+    <div class="pro-item"><b>💬 Ansökningsfrågor</b><small>Få hjälp med “Varför vill du jobba här?” och liknande.</small></div>
+    <div class="pro-item"><b>🧠 Djup matchning</b><small>Mer detaljerad analys av CV mot jobbannons.</small></div>
+    <div class="pro-item"><b>🎤 Intervjuträning</b><small>Öva på frågor för just tjänsten.</small></div>
+    <div class="pro-item"><b>♾️ Obegränsade ansökningar</b><small>Slipp begränsningen på gratisnivån.</small></div>
+    <div class="pro-item"><b>🎯 CV-förbättring</b><small>Få konkreta förslag för att passa fler jobb.</small></div>
+  </div>
+  <button class="pro-cta" onclick="openPro()">Se vad Pro ger dig →</button>
+  <div class="pro-note">Betalning är inte inkopplad ännu. Detta är produktens framtida Pro-flöde.</div>
+</section>
+
+<div class="pro-modal" id="proModal" onclick="if(event.target===this)closePro()">
+  <div class="pro-card">
+    <button class="pro-close" onclick="closePro()">×</button>
+    <span class="pro-badge">✦ ANSÖKO PRO</span>
+    <h2>Mer hjälp. Mindre jobb.</h2>
+    <p>Du kan fortsätta använda jobbsökningen och grundmatchningen gratis. Pro är för stegen efter att du hittat jobbet.</p>
+    <ul class="pro-list">
+      <li>✓ Obegränsade personliga brev</li>
+      <li>✓ Svar på arbetsgivarens ansökningsfrågor</li>
+      <li>✓ Djupare CV ↔ jobb-matchning</li>
+      <li>✓ Personliga förbättringar av CV:t</li>
+      <li>✓ Intervjuförberedelse och AI-intervju</li>
+    </ul>
+    <button class="pro-cta" onclick="alert('Pro-betalning kopplas in här senare. Just nu är Ansöko i testläge.')">Fortsätt med Pro — 69 kr/mån</button>
+    <div class="pro-note">Ingen betalning sker i testversionen.</div>
+  </div>
+</div>
+
+<script>
+function openPro(){document.getElementById('proModal').classList.add('open')}
+function closePro(){document.getElementById('proModal').classList.remove('open')}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closePro()});
+</script>
+
+<script type="module">
+const cvFileInput=document.getElementById("cvFile");
+const cvStatus=document.getElementById("cvFileStatus");
+const cvTextArea=document.querySelector('textarea[name="cv"], textarea[placeholder*="CV" i], textarea[id*="cv" i]');
+
+function setCvStatus(msg,kind=""){ if(cvStatus){cvStatus.textContent=msg;cvStatus.className="cv-file-status "+kind;} }
+
+async function readPdf(file){
+  const pdfjs=await import("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs");
+  pdfjs.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.mjs";
+  const data=await file.arrayBuffer();
+  const pdf=await pdfjs.getDocument({data}).promise;
+  let text=[];
+  for(let i=1;i<=pdf.numPages;i++){
+    const p=await pdf.getPage(i);
+    const content=await p.getTextContent();
+    text.push(content.items.map(x=>x.str||"").join(" "));
+  }
+  return text.join("\n\n").trim();
+}
+
+async function readDocx(file){
+  if(!window.mammoth) throw new Error("Word-läsaren kunde inte laddas.");
+  const result=await window.mammoth.extractRawText({arrayBuffer:await file.arrayBuffer()});
+  return (result.value||"").trim();
+}
+
+async function readTxt(file){ return (await file.text()).trim(); }
+
+async function readCvFile(file){
+  const name=file.name.toLowerCase();
+  if(name.endsWith(".pdf")) return readPdf(file);
+  if(name.endsWith(".docx")) return readDocx(file);
+  if(name.endsWith(".txt")) return readTxt(file);
+  throw new Error("Filformatet stöds inte ännu. Använd PDF, Word (.docx) eller TXT.");
+}
+
+cvFileInput?.addEventListener("change",async e=>{
+  const file=e.target.files?.[0];
+  if(!file)return;
+  setCvStatus("Läser "+file.name+"…","loading");
+  try{
+    const text=await readCvFile(file);
+    if(!text){
+      setCvStatus("Filen kunde läsas men innehåller ingen markerbar text. Om det är ett skannat CV behöver det OCR-stöd.","error");
+      return;
+    }
+    if(cvTextArea){
+      cvTextArea.value=text;
+      cvTextArea.dispatchEvent(new Event("input",{bubbles:true}));
+    }
+    setCvStatus("✓ CV:t är inläst. Ansöko använder texten när jobben matchas.","success");
+  }catch(err){
+    console.error(err);
+    setCvStatus("Kunde inte läsa CV:t: "+(err.message||"okänt fel"),"error");
+  }
+});
+</script>
+
+<script>
+function getCvForApplication(){
+  const candidates=[...document.querySelectorAll("textarea")];
+  return candidates.map(x=>x.value||"").find(v=>v.trim().length>40)||"";
+}
+function closestJobInfo(btn){
+  const card=btn.closest(".job-card")||btn.closest(".card")||btn.parentElement?.parentElement;
+  const text=card?card.innerText:"";
+  return {card,text};
+}
+function extractName(cv){
+  const first=cv.trim().split(/\n+/).map(x=>x.trim()).find(x=>x.length>2 && x.length<60);
+  return first||"";
+}
+function buildLetter(jobText,cv){
+  const name=extractName(cv);
+  const lower=(cv+" "+jobText).toLowerCase();
+  const strengths=[];
+  const mappings=[
+    ["butik","butikserfarenhet"],
+    ["försäljning","försäljning och service"],
+    ["kundservice","kundservice"],
+    ["lager","lager och varuhantering"],
+    ["kassa","kassavana"],
+    ["leveranser","leveranser och varuhantering"],
+    ["administration","administrativa arbetsuppgifter"],
+    ["service","service och kundbemötande"]
+  ];
+  mappings.forEach(([key,label])=>{if(lower.includes(key) && cv.toLowerCase().includes(key)) strengths.push(label)});
+  const unique=[...new Set(strengths)].slice(0,4);
+  const greeting=name?`Hej,\n\n`:"Hej,\n\n";
+  const body=unique.length
+    ?`Jag söker tjänsten eftersom den passar min erfarenhet och det jag vill utvecklas vidare inom. I min bakgrund har jag erfarenhet av ${unique.join(", ")}. Jag trivs med att ta ansvar, arbeta strukturerat och möta människor på ett bra sätt.\n\nJag tror att jag skulle kunna bidra med engagemang, servicekänsla och en vilja att lära mig. Jag berättar gärna mer om min erfarenhet och varför jag är intresserad av tjänsten vid en intervju.`
+    :`Jag söker tjänsten eftersom arbetsuppgifterna och möjligheten att utvecklas känns intressanta. Jag är motiverad, ansvarstagande och vill gärna bidra till verksamheten.\n\nJag berättar gärna mer om mig själv och varför jag är intresserad av tjänsten vid en intervju.`;
+  return greeting+body+"\n\nMed vänliga hälsningar\n"+(name||"[Ditt namn]");
+}
+function showOutput(btn,text,meta){
+  const panel=btn.closest(".application-panel");
+  const out=panel.querySelector(".application-output");
+  out.classList.add("open");
+  out.querySelector("textarea").value=text;
+  out.querySelector(".app-meta").textContent=meta;
+  out.scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+
+async function callAnsokoAI(mode,payload){
+  const endpoint=(window.ANSOKO_API_URL||"/api/ai");
+  const res=await fetch(endpoint,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({mode,...payload})});
+  const data=await res.json().catch(()=>({}));
+  if(!res.ok) throw new Error(data.error||"AI-tjänsten kunde inte svara.");
+  if(!data.text) throw new Error("AI-tjänsten returnerade inget svar.");
+  return data.text;
+}
+function setAIStatus(btn,msg,kind=""){
+  const panel=btn.closest(".application-panel");
+  let el=panel.querySelector(".ai-status");
+  if(!el){el=document.createElement("div");el.className="ai-status";panel.appendChild(el)}
+  el.textContent=msg;el.className="ai-status "+kind;
+}
+function getJobSourceText(btn){
+  const info=closestJobInfo(btn);
+  return info.text;
+}
+async function createApplicationFromCard(btn){
+  const cv=getCvForApplication();
+  if(!cv){alert("Lägg först in ditt CV, antingen genom att ladda upp filen eller skriva in CV-texten.");return}
+  const job=getJobSourceText(btn);
+  setAIStatus(btn,"Skapar ett personligt brev…","loading");
+  try{
+    const text=await callAnsokoAI("cover_letter",{cv,job});
+    showOutput(btn,text,"AI-genererat utkast. Kontrollera alltid att uppgifterna stämmer innan du skickar.");
+    setAIStatus(btn,"✓ Klart.","ok");
+  }catch(err){
+    // Keep the product usable without the backend.
+    const fallback=buildLetter(job,cv);
+    showOutput(btn,fallback,"Offline-utkast. Koppla Ansöko AI-backend för riktig AI-generering.");
+    setAIStatus(btn,"AI-backend är inte ansluten ännu — visar ett lokalt utkast.","error");
+  }
+}
+async function showApplicationQuestions(btn){
+  const cv=getCvForApplication();
+  const job=getJobSourceText(btn);
+  setAIStatus(btn,"Analyserar ansökningsfrågor…","loading");
+  try{
+    const text=await callAnsokoAI("application_questions",{cv,job});
+    showOutput(btn,text,"AI-genererade frågor och svarsförslag. Ansöko får inte hitta på erfarenheter.");
+    setAIStatus(btn,"✓ Klart.","ok");
+  }catch(err){
+    const q=`1. Varför vill du arbeta hos oss?\n\n2. Varför passar du för den här tjänsten?\n\n3. Vilka erfarenheter från ditt CV är mest relevanta?\n\n4. Berätta om en situation där du gav bra service eller tog ansvar.\n\n5. Finns det något krav i annonsen som du vill kunna förklara?`;
+    showOutput(btn,q,"Offline-version. Koppla Ansöko AI-backend för personliga svarsförslag.");
+    setAIStatus(btn,"AI-backend är inte ansluten ännu — visar grundfrågor.","error");
+  }
+}
+</script>
+</body>
+</html>
+
